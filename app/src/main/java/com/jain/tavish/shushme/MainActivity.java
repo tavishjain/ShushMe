@@ -1,6 +1,7 @@
 package com.jain.tavish.shushme;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 editor.commit();
                 mIsEnabled = b;
                 if(mIsEnabled) {
-                    geofencing.registerAllGoefences();
+                    geofencing.registerAllGeofences();
                 }else{
                     geofencing.unRegisterAllGeofences();
                 }
@@ -92,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void onLocationPermissionClicked(View view){
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ASK_LOCATION_PERMISSION);
+    }
+
+    public void onRingerPermissionClicked(View view){
+        Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+        startActivity(intent);
     }
 
     public void onAddPlaceButtonClicked(View view) {
@@ -157,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onResult(@NonNull PlaceBuffer places) {
                 mAdapter.swapPlaces(places);
                 geofencing.updateGeofencesList(places);
-                if (mIsEnabled) geofencing.registerAllGoefences();
+                if (mIsEnabled) geofencing.registerAllGeofences();
 
             }
         });
@@ -175,6 +181,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }else{
             locationPermissions.setChecked(true);
             locationPermissions.setEnabled(false);
+        }
+
+        CheckBox ringerPermissions = (CheckBox) findViewById(R.id.ringer_permission_checkbox);
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= 24 && !nm.isNotificationPolicyAccessGranted()) {
+            ringerPermissions.setChecked(false);
+        } else {
+            ringerPermissions.setChecked(true);
+            ringerPermissions.setEnabled(false);
         }
     }
 

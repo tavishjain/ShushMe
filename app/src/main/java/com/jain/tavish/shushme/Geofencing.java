@@ -32,7 +32,7 @@ public class Geofencing implements ResultCallback<Status> {
         mGeofencePendingIntent = null;
     }
 
-    public void registerAllGoefences(){
+    public void registerAllGeofences(){
         if(googleApiClient ==  null || !googleApiClient.isConnected() || geofenceList == null || geofenceList.size() == 0){
             return;
         }
