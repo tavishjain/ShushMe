@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".GeofenceBroadcastReceiver"/>
+
         <provider
             android:name="com.jain.tavish.shushme.provider.PlaceContentProvider"
             android:authorities="com.jain.tavish.shushme"
